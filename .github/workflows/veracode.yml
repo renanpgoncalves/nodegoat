@@ -1,6 +1,37 @@
 name: security-action
 on: [push]
 jobs:   
+  Veracode-Software-Composition-Analisys:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Archive Release
+      uses: thedoctor0/zip-release@master
+      with:
+        filename: 'veracode.zip'
+        path: .
+    - shell: bash
+      env:
+        SRCCLR_API_TOKEN: ${{ secrets.SRCCLR_API_TOKEN }}
+      run: |
+        export SRCCLR_SCM_URI="https://github.com/renanpgoncalves/nodegoat.git"
+        export SRCCLR_SCM_REF=${{ github.workflow }}
+        export SRCCLR_SCM_REF_TYPE="branch"
+        export SRCCLR_SCM_REV=${{ github.run_id }}
+        
+        export EXTRA_ARGS='--update-advisor'
+        curl -sSL https://download.sourceclear.com/ci.sh | bash -s scan $EXTRA_ARGS
+
+  Veracode-SAST-Pipeline-scan:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: veracode/Veracode-pipeline-scan-action@pipeline-scan-beta-v0.0.4
+    - name: Veracode Pipeline scan
+      with:
+        vid: '${{ secrets.VERACODE_ID }}'
+        vkey: '${{ secrets.VERACODE_KEY }}'
+        file: veracode.zip
+
   Veracode-SAST-Policy-Scan:
     runs-on: ubuntu-latest
     steps:
@@ -21,7 +52,6 @@ jobs:
     - uses: actions/upload-artifact@v2 
       with:
         path: NodeGoat/veracode.zip 
-
     - uses: veracode/veracode-uploadandscan-action@master 
       with:
         vid: '${{ secrets.VERACODE_ID }}'
@@ -33,11 +63,3 @@ jobs:
         deleteIncompleteScan: 'true'
         version: ${{ github.run_id }}'
         scantimeout: 30
-        
-  Veracode-SAST-Pipeline-scan:
-  - name: Veracode Pipeline-Scan
-  uses: veracode/Veracode-pipeline-scan-action@pipeline-scan-beta-v0.0.4
-  with:
-        vid: '${{ secrets.VERACODE_ID }}'
-        vkey: '${{ secrets.VERACODE_KEY }}'
-    file: veracode.zip
