@@ -5,8 +5,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
-    - name: Archive Release
-      uses: thedoctor0/zip-release@master
+      name: Archive Release
+    - uses: thedoctor0/zip-release@master
       with:
         filename: 'veracode.zip'
         path: .
@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: veracode/Veracode-pipeline-scan-action@pipeline-scan-beta-v0.0.4
-    - name: Veracode Pipeline scan
+      name: Veracode Pipeline scan
       with:
         vid: '${{ secrets.VERACODE_ID }}'
         vkey: '${{ secrets.VERACODE_KEY }}'
@@ -36,19 +36,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
-    - name: Archive Release
-      uses: thedoctor0/zip-release@master
+      name: Archive Release
+    - uses: thedoctor0/zip-release@master
       with:
         filename: 'veracode.zip'
-        path: .
-     
-    - uses: actions/setup-java@v3
-    
+        path: .    
+    - uses: actions/setup-java@v3 
       with:
        distribution: 'zulu' # See 'Supported distributions' for available options
-       java-version: '8'
-        
-      
+       java-version: '8'           
     - uses: actions/upload-artifact@v2 
       with:
         path: NodeGoat/veracode.zip 
