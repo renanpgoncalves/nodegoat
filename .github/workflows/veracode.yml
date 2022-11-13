@@ -72,7 +72,7 @@ jobs:
         vid: '${{ secrets.VERACODE_ID }}'
         vkey: '${{ secrets.VERACODE_KEY }}'
         criticality: 'VeryHigh'
-        appname: 'Node-Vulnerable-Demo'
+        appname: 'Node-Vulnerable-Furia'
         createprofile: 'true'
         filepath: 'veracode.zip'
         deleteIncompleteScan: 'true'
