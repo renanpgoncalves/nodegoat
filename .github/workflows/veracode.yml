@@ -46,7 +46,7 @@ jobs:
       run: unzip -qq -n pipeline-scan-LATEST.zip
     - shell: bash
       run: |
-        java -jar pipeline-scan.jar --veracode_api_id "${{ secrets.VERACODE_ID }}" --veracode_api_key "${{ secrets.VERACODE_KEY }}" --file "veracode.zip" --fail_on_severity="Very High, High" --issue_details true
+        java -jar pipeline-scan.jar --veracode_api_id "${{ secrets.VERACODE_ID }}" --veracode_api_key "${{ secrets.VERACODE_KEY }}" --file "veracode.zip" --issue_details true
   
   Veracode-SAST-Policy-Scan:
     runs-on: ubuntu-latest
@@ -72,7 +72,7 @@ jobs:
         vid: '${{ secrets.VERACODE_ID }}'
         vkey: '${{ secrets.VERACODE_KEY }}'
         criticality: 'VeryHigh'
-        appname: 'Node-Vulnerable-Furia'
+        appname: 'NodeGoat-Furia'
         createprofile: 'true'
         filepath: 'veracode.zip'
         deleteIncompleteScan: 'true'
